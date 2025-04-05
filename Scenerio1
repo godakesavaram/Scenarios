@@ -1,3 +1,26 @@
+Input:
++--------+
+|   teams|
++--------+
+|   India|
+|Pakistan|
+|SriLanka|
++--------+
+
+expected output
+
++--------------------+
+|             Matches|
++--------------------+
+|   Pakistan vs India|
+|   SriLanka vs India|
+|SriLanka vs Pakistan|
++--------------------+
+
+
+Solution
+
+
 data = [
     ("India",),
     ("Pakistan",),
