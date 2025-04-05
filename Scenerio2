@@ -29,6 +29,20 @@ Expected Output
 
 Solution
 
+from pyspark import *
+from pyspark import SparkConf, SparkContext
+from pyspark.sql import *
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import *
+from pyspark.sql.types import *
+from pyspark.sql.window import *
+
+conf = SparkConf().setMaster("local[*]").setAppName("test")
+sc = SparkContext(conf=conf)
+sc.setLogLevel("ERROR")
+
+spark = SparkSession.builder.getOrCreate()
+
 employees_data = [
     (101, "Alice",   None, 1, 90000),
     (102, "Bob",     101,  2, 80000),
