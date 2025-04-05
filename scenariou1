@@ -1,0 +1,17 @@
+data = [
+    ("India",),
+    ("Pakistan",),
+    ("SriLanka",)
+]
+myschema = ["teams"]
+df = spark.createDataFrame(data, schema=myschema)
+df.show()
+df1=df
+df1=df1.withColumnRenamed('teams','team1')
+# df.crossJoin(df1).show()
+res = df.join(df1, (df['teams'] != df1['team1']) & (df['teams'] > df1['team1']), 'full')
+res.show()
+k=res.dropna()
+k.show()
+k=k.selectExpr("concat_ws(' vs ', teams, team1) as final")
+k.show()
