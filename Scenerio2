@@ -1,0 +1,53 @@
+Input
+
++-----+-------+-----+-----+------+
+|empid|empname|mgrid|depid|salary|
++-----+-------+-----+-----+------+
+|  101|  Alice| NULL|    1| 90000|
+|  102|    Bob|  101|    2| 80000|
+|  103|Charlie|  101|    3| 85000|
+|  104|  David|  102|    4| 70000|
+|  105|    Eve|  102|    3| 72000|
+|  106|  Frank|  103|    2| 73000|
+|  107|  Grace|  103|    1| 71000|
+|  108| Hannah|  104|    4| 68000|
+|  109|    Ian|  104|    3| 69000|
+|  110|   Jane|  105|    2| 75000|
++-----+-------+-----+-----+------+
+
+Expected Output
+
++-----+-----------+-----------+
+|depid|max(salary)|min(salary)|
++-----+-----------+-----------+
+|    1|      90000|      71000|
+|    3|      85000|      69000|
+|    2|      80000|      73000|
+|    4|      70000|      68000|
++-----+-----------+-----------+
+
+
+Solution
+
+employees_data = [
+    (101, "Alice",   None, 1, 90000),
+    (102, "Bob",     101,  2, 80000),
+    (103, "Charlie", 101,  3, 85000),
+    (104, "David",   102,  4, 70000),
+    (105, "Eve",     102,  3, 72000),
+    (106, "Frank",   103,  2, 73000),
+    (107, "Grace",   103,  1, 71000),
+    (108, "Hannah",  104,  4, 68000),
+    (109, "Ian",     104,  3, 69000),
+    (110, "Jane",    105,  2, 75000)
+]
+
+# Define the schema (column names)
+employees_columns = ["empid", "empname", "mgrid", "depid", "salary"]
+
+# Create DataFrame for employees
+employees_df = spark.createDataFrame(employees_data, employees_columns)
+
+# Display the Employees DataFrame
+employees_df.show()
+employees_df.groupby('depid').agg(max('salary'),min('salary')).show()
