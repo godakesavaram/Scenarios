@@ -1,0 +1,57 @@
+Input
+
++----+---------------+
+|name|           rank|
++----+---------------+
+|   a|   [1, 1, 1, 3]|
+|   b|   [1, 2, 3, 4]|
+|   c|[1, 1, 1, 1, 4]|
+|   d|            [3]|
++----+---------------+
+
++----+
+Expected Output
++----+
+
++----+
+|name|
++----+
+|   c|
++----+
+
+
+
+
+data = [
+
+    ("a", [1, 1, 1, 3]),
+
+    ("b", [1, 2, 3, 4]),
+
+    ("c", [1, 1, 1, 1, 4]),
+
+    ("d", [3])
+
+]
+
+df = spark.createDataFrame(data, ["name", "rank"])
+
+df.show()
+
+f=df.withColumn('rank',explode('rank'))
+
+f=f.filter('rank=1')
+
+f=f.groupby('name').agg(count('rank').alias('rank')).orderBy(desc('rank'))
+
+rt=f.agg(max('rank').alias('rank'))
+
+rt.show()
+
+f.join(rt,'rank','inner').drop('rank').show()
+
+# win=Window.orderBy(desc('rank'))
+# fin=f.withColumn('dern',dense_rank().over(win))
+# fin.show()
+# fin.filter("dern=1").drop('dern','rank').show()
+ 
