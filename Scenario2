@@ -64,4 +64,5 @@ employees_df = spark.createDataFrame(employees_data, employees_columns)
 
 # Display the Employees DataFrame
 employees_df.show()
-employees_df.groupby('depid').agg(max('salary'),min('salary')).show()
+employees_df=employees_df.groupby('depid').agg(max('salary'),min('salary'))
+employees_df.show()
