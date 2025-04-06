@@ -1,0 +1,78 @@
+Input
++---+-------+
+| id|   name|
++---+-------+
+|  1|   rama|
+|  2|   siva|
+|  3|krishna|
++---+-------+
+
++---+------+-----+
+| id|   sub|marks|
++---+------+-----+
+|  1|   sql|   24|
+|  2|   sql|   20|
+|  3|   sql|   25|
+|  1|python|   19|
+|  2|python|   17|
+|  3|python|   24|
++---+------+-----+
+
+Expected Output
++---+-------+----+-----------+
+| id|   name|perc|     result|
++---+-------+----+-----------+
+|  1|   rama|86.0|distinction|
+|  2|   siva|74.0|first class|
+|  3|krishna|98.0|distinction|
++---+-------+----+-----------+
+
+
+
+Solution
+
+from pyspark import *
+from pyspark import SparkConf, SparkContext
+from pyspark.sql import *
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import *
+from pyspark.sql.types import *
+from pyspark.sql.window import *
+
+conf = SparkConf().setMaster("local[*]").setAppName("test")
+sc = SparkContext(conf=conf)
+sc.setLogLevel("ERROR")
+
+spark = SparkSession.builder.getOrCreate()
+
+data1 = [
+    (1,'rama'),
+    (2,'siva'),
+    (3,'krishna')
+
+]
+s=['id','name']
+df=spark.createDataFrame(data1,s)
+df.show()
+data2 = [
+    (1,'sql',24),
+    (2,'sql',20),
+    (3,'sql',25),
+    (1,'python',19),
+    (2,'python',17),
+    (3,'python',24)
+
+]
+s1=['id','sub','marks']
+
+df2=spark.createDataFrame(data2,s1)
+df2.show()
+
+df.join(df2,'id','inner').show()
+per = df2.groupBy('id').agg((sum(df2.marks) / 50 * 100).alias('perc'))
+
+final=per.withColumn('result',expr('''
+case when perc>85 then "distinction"
+when perc<75 and perc>70 then "first class"
+else "second class" end'''))
+df.join(final,'id','inner').orderBy('id').show()
