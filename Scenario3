@@ -1,3 +1,46 @@
+Input
+
++-----+-------------+-------------+
+|empid|commissionamt|monthlastdate|
++-----+-------------+-------------+
+|    1|          300|  31-Jan-2021|
+|    1|          400|  28-Feb-2021|
+|    1|          200|  31-Mar-2021|
+|    2|         1000|  31-Oct-2021|
+|    2|          900|  31-Dec-2021|
++-----+-------------+-------------+
+
+
+
+Expected Output
+
+
++-----+-------------+-------------+
+|empid|commissionamt|monthlastdate|
++-----+-------------+-------------+
+|    2|          900|   2021-12-31|
+|    1|          200|   2021-03-31|
++-----+-------------+-------------+
+
+
+
+
+from pyspark import *
+from pyspark import SparkConf, SparkContext
+from pyspark.sql import *
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import *
+from pyspark.sql.types import *
+from pyspark.sql.window import *
+
+conf = SparkConf().setMaster("local[*]").setAppName("test")
+sc = SparkContext(conf=conf)
+sc.setLogLevel("ERROR")
+
+spark = SparkSession.builder.getOrCreate()
+
+
+
 data = [
     (1, 300, "31-Jan-2021"),
     (1, 400, "28-Feb-2021"),
