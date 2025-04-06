@@ -1,4 +1,4 @@
-Input:
+vInput:
 +--------+
 |   teams|
 +--------+
@@ -49,5 +49,5 @@ res = df.join(df1, (df['teams'] != df1['team1']) & (df['teams'] > df1['team1']),
 res.show()
 k=res.dropna()
 k.show()
-k=k.selectExpr("concat_ws(' vs ', teams, team1) as final")
-k.show()
+kesav=k.selectExpr("concat_ws(' vs ', teams, team1) as final")
+kesav.show()
